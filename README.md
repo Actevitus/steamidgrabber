@@ -1,2 +1,2 @@
 # steamidfetcher
-A simple webapp based on flask that I use to fetch steamid64's from the vanity url.
+A simple webapp based on flask that I use to grab steamid64's from the vanity url.
