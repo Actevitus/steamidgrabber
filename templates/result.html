@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lookup Result</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    body { font-family: 'Fira Code', monospace; background: #1a202c; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(5px);} to {opacity:1; transform: translateY(0);} }
+    @keyframes glow {0%,100%{text-shadow: 0 0 2px rgba(76,161,175,0.4);}50%{text-shadow: 0 0 6px rgba(76,161,175,0.2);} }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .char { display: inline-block; opacity: 0; }
+    .animate-glow { animation: glow 5s ease-in-out infinite; }
+    .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
+  </style>
+</head>
+<body class="bg-gray-900 text-gray-100 flex items-center justify-center min-h-screen">
+  <div class="w-full max-w-md bg-gray-800 rounded-lg shadow-lg p-8 space-y-4">
+    <h1 id="animated-heading" class="text-2xl font-semibold text-teal-400 text-center mb-4 animate-glow"></h1>
+
+    {% if error %}
+      <div class="bg-red-700 text-red-200 px-4 py-3 rounded animate-pulse text-center">
+        {{ error }}
+      </div>
+    {% else %}
+      {% if avatar_url %}
+        <div class="flex justify-center mb-2">
+          <img src="{{ avatar_url }}" alt="User Avatar" class="w-24 h-24 rounded-full border-2 border-teal-400 animate-fade-in" />
+        </div>
+      {% endif %}
+
+      <div class="bg-green-800 text-green-200 px-4 py-3 rounded flex items-center justify-center space-x-2">
+        <span class="font-medium">SteamID64:</span>
+        <code id="steamid" class="bg-gray-700 px-2 py-1 rounded">{{ steamid64 }}</code>
+        <button id="copy-btn" class="py-1 px-2 bg-gray-700 rounded hover:bg-gray-600 transition" aria-label="Copy SteamID64">📋</button>
+      </div>
+
+      {% if personaname or profile_created or location %}
+        <div class="bg-gray-700 text-gray-200 px-4 py-3 rounded flex flex-col space-y-1 animate-fade-in">
+          {% if personaname %}<div><span class="font-medium">Name:</span> {{ personaname }}</div>{% endif %}
+          {% if profile_created %}<div><span class="font-medium">Profile Created:</span> {{ profile_created }}</div>{% endif %}
+          {% if location %}<div><span class="font-medium">Location:</span> {{ location }}</div>{% endif %}
+        </div>
+      {% endif %}
+
+      <div class="bg-gray-700 text-gray-200 px-4 py-3 rounded flex items-center justify-center space-x-2 animate-fade-in">
+        <span class="font-medium">URL:</span>
+        <a href="{{ full_url }}" target="_blank" class="text-teal-300 hover:underline break-all">{{ full_url }}</a>
+      </div>
+    {% endif %}
+
+    <a href="/" class="block w-full text-center py-3 bg-teal-500 hover:bg-teal-600 rounded font-medium uppercase tracking-wide">
+      New Lookup
+    </a>
+  </div>
+
+  <footer class="absolute bottom-4 text-sm text-gray-500 w-full text-center">
+    Made by @actevitus with ❤️ – 2025
+    <div class="mt-2 flex justify-center space-x-4">
+      <a href="https://github.com/Actevitus" target="_blank" aria-label="GitHub" class="text-gray-500 hover:text-gray-300">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 0C5.371 0 0 5.371 0 12c0 5.303 3.438 9.8 8.205 11.386.6.111.82-.261.82-.579 0-.286-.011-1.044-.016-2.049-3.338.726-4.042-1.613-4.042-1.613-.546-1.386-1.333-1.756-1.333-1.756-1.091-.747.083-.732.083-.732 1.205.085 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.419-1.305.762-1.605-2.665-.305-5.472-1.334-5.472-5.937 0-1.312.469-2.383 1.235-3.222-.124-.303-.535-1.526.116-3.179 0 0 1.006-.323 3.301 1.23.958-.266 1.984-.399 3.005-.404 1.02.004 2.047.138 3.005.404 2.291-1.554 3.295-1.23 3.295-1.23.652 1.653.241 2.876.118 3.179.77.839 1.234 1.91 1.234 3.222 0 4.602-2.811 5.63-5.486 5.936.431.372.816 1.104.816 2.223 0 1.606-.015 2.898-.015 3.293 0 .32.217.694.825.576C20.565 21.796 24 17.299 24 12c0-6.629-5.371-12-12-12z"/>
+        </svg>
+      </a>
+      <a href="https://x.com/actevitus" target="_blank" aria-label="X" class="text-gray-500 hover:text-gray-300">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M24 4.557a9.93 9.93 0 01-2.828.775 4.932 4.932 0 002.165-2.724c-.951.566-2.005.978-3.127 1.2a4.916 4.916 0 00-8.384 4.482A13.944 13.944 0 011.671 3.149a4.916 4.916 0 001.523 6.574 4.903 4.903 0 01-2.228-.616c-.054 2.281 1.581 4.415 3.949 4.89a4.935 4.935 0 01-2.224.084 4.919 4.919 0 004.596 3.417A9.867 9.867 0 010 19.54a13.94 13.94 0 007.548 2.212c9.056 0 14.001-7.496 14.001-13.986 0-.21 0-.423-.015-.637A10.012 10.012 0 0024 4.557z"/>
+        </svg>
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    // Heading animation
+    ;(function(){
+      const text = "SteamID64 Grabber";
+      const container = document.getElementById("animated-heading");
+      container.innerHTML = "";
+      text.split("").forEach((ch,i) => {
+        const span = document.createElement("span");
+        span.textContent = ch;
+        span.className = "char animate-glow";
+        span.style.animation = `fadeInUp 0.5s ease forwards ${i*0.05}s`;
+        container.appendChild(span);
+      });
+    })();
+
+    // Copy-to-clipboard toggle
+    document.getElementById('copy-btn')?.addEventListener('click', () => {
+      const code = document.getElementById('steamid').textContent.trim();
+      navigator.clipboard.writeText(code).then(() => {
+        const btn = document.getElementById('copy-btn');
+        btn.textContent = '✓';
+        setTimeout(() => { btn.textContent = '📋'; }, 2000);
+      });
+    });
+  </script>
+</body>
+</html>
